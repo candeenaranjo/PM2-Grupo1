@@ -6,7 +6,7 @@ int Precarga(Alumno LSO[], int *cant)
 {
     int i;
     Alumno aux;
-    FILE* fp = fopen("Alumnos.txt", "r");
+    FILE* fp = fopen("Operaciones.txt", "r");
     if(fp==NULL)
     {
         printf("No se encontro el archivo\n");
