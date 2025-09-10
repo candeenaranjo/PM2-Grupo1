@@ -2,18 +2,21 @@
 #define LSO_H_INCLUDED
 #include "Alumno.h"
 
-int LocalizarLSO (char codigo[], Alumno lso[], int *pos, int cant)
+int LocalizarLSO (char codigo[], Alumno lso[], int *pos, int cant, int *celdas)
 {
 
     (*pos)=0;
+    (*celdas)=0;
 
     while((*pos)<cant && strcmp(codigo,lso[*pos].codigo)>0)
     {
         (*pos)++;
+        (*celdas)++;
     }
 
     if((*pos)<cant && strcmp(codigo,lso[*pos].codigo)==0)
     {
+        (*celdas)++;
         return 0;   //localizado
     }
     else
@@ -22,9 +25,10 @@ int LocalizarLSO (char codigo[], Alumno lso[], int *pos, int cant)
     }
 }
 
-int AltaLSO(Alumno aux, Alumno lso[], int *cant)
+int AltaLSO(Alumno aux, Alumno lso[], int *cant, int *corrimientos)
 {
     int pos, i;
+    int celdas=0;
 
     if((*cant)==TAM)
     {
@@ -32,11 +36,12 @@ int AltaLSO(Alumno aux, Alumno lso[], int *cant)
     }
     else
     {
-        if(LocalizarLSO(aux.codigo,lso,&pos,*cant)==1)
+        if(LocalizarLSO(aux.codigo,lso,&pos,*cant,&celdas)==1)
         {
             for(i=(*cant); i>pos; i--)
             {
                 lso[i]=lso[i-1];
+                (*corrimientos)++;
             }
 
             lso[pos]=aux;
@@ -50,35 +55,22 @@ int AltaLSO(Alumno aux, Alumno lso[], int *cant)
     }
 }
 
-int BajaLSO(Alumno aux, Alumno lso[], int *cant)
+int BajaLSO(Alumno aux, Alumno lso[], int *cant, int *corrimientos)
 {
 
     int pos, i, confirmacion;
+    int celdas = 0;
 
-    if(LocalizarLSO(aux.codigo,lso,&pos,*cant)==0)
+    if(LocalizarLSO(aux.codigo,lso,&pos,*cant,&celdas)==0 && strcmp(aux.codigo,lso[pos].codigo)==0 && strcmp(aux.condicion,lso[pos].condicion)==0 && strcmp(aux.correo,lso[pos].correo)==0 && strcmp(aux.nombre,lso[pos].nombre)==0 && aux.nota == lso[pos].nota)
     {
 
-        printf("\nLos datos del Alumno con codigo: %s\n", lso[pos].codigo);
-        printf("Nombre y Apellido: %s\n", lso[pos].nombre);
-        printf("Correo: %s\n", lso[pos].correo);
-        printf("Nota: %d\n", lso[pos].nota);
-        printf("Condicion: %s\n", lso[pos].condicion);
-        printf("Confirma que quiere eliminar al Alumno: (1->si / 2->no)\n");
-        scanf("%d", &confirmacion);
-        if(confirmacion==1)
-        {
-            for(i=pos; i<(*cant);i++)
+            for(i=pos; i<(*cant)-1;i++)     //consultar por el cant - 1
             {
                 lso[i]=lso[i+1];
+                (*corrimientos)++;
             }
             (*cant)--;
             return 0;   //baja exitosa del alumno
-        }
-        else
-        {
-            return 1;    //no quiso eliminar al alumno
-        }
-
     }
     else
     {
@@ -86,11 +78,11 @@ int BajaLSO(Alumno aux, Alumno lso[], int *cant)
     }
 }
 
-int EvocarLSO(Alumno *aux, Alumno lso[], char codigo[],int cant)
+int EvocarLSO(Alumno *aux, Alumno lso[], char codigo[], int cant, int *celdas)
 {
     int pos;
 
-    if(LocalizarLSO(codigo,lso,&pos,cant)==0)
+    if(LocalizarLSO(codigo,lso,&pos,cant,celdas)==0)
     {
         *aux = lso[pos];
         return 0;   //evocacion exitosa
@@ -98,96 +90,4 @@ int EvocarLSO(Alumno *aux, Alumno lso[], char codigo[],int cant)
     return 1;   //no se encontro el alumno
 }
 
-int ModificarLSO(Alumno lso[], char codigo[],int cant)
-{
-
-    int pos,op,condicion, i;
-
-    if(LocalizarLSO(codigo,lso,&pos,cant)==0)
-    {
-
-        do
-        {
-            printf("\nLos datos del Alumno son:\n");
-            printf("Codigo de identificacion: %s\n", lso[pos].codigo);
-            printf("Nombre y Apellido: %s\n", lso[pos].nombre);
-            printf("Correo: %s\n", lso[pos].correo);
-            printf("Nota: %d\n", lso[pos].nota);
-            printf("Condicion: %s\n", lso[pos].condicion);
-            printf("\nQue desea modificar de este Alumno?\n");
-            printf("1) Nombre y Apellido\n");
-            printf("2) Correo\n");
-            printf("3) Nota\n");
-            printf("4) Condicion\n");
-            printf("5) Finalizar\n");
-            scanf("%d",&op);
-            system("cls");
-            switch(op)
-            {
-            case 1:
-                printf("Ingrese el nuevo Nombre y Apellido del Alumno: ");
-                scanf(" %[^\n]",lso[pos].nombre);
-                for(i=0; lso[pos].nombre[i] != '\0'; i++)
-                    lso[pos].nombre[i]=toupper(lso[pos].nombre[i]);
-                printf("Se modifico el Nombre y Apellido con exito\n");
-                system("pause");
-                system("cls");
-                break;
-
-            case 2:
-                printf("Ingrese nuevo correo del Alumno: ");
-                scanf(" %[^\n]",lso[pos].correo);
-                for(i=0; lso[pos].correo[i] != '\0'; i++)
-                    lso[pos].correo[i]=toupper(lso[pos].correo[i]);
-                printf("Se modifico el correo con exito\n");
-                system("pause");
-                system("cls");
-                break;
-            case 3:
-                printf("Ingrese la nota del Alumno: ");
-                scanf("%d",&lso[pos].nota);
-                while(lso[pos].nota<0 || lso[pos].nota>10)
-                {
-                    printf("Nota invalida. Ingrese una nota entre 0 y 10");
-                    scanf("%d",&lso[pos].nota);
-                }
-                printf("Se modifico la nota con exito\n");
-                system("pause");
-                system("cls");
-                break;
-            case 4:
-                do
-                {
-                    printf("\nIngrese condicion del Alumno\n1.Promocion\n2.Regular\n3.Libre\n4.Ausente\n");
-                    scanf(" %d",&condicion);
-                }
-                while(condicion<1 || condicion>4);
-
-                switch(condicion)
-                {
-                case 1:
-                    strcpy(lso[pos].condicion,"Promocion");
-                    break;
-                case 2:
-                    strcpy(lso[pos].condicion,"Regular");
-                    break;
-                case 3:
-                    strcpy(lso[pos].condicion,"Libre");
-                    break;
-                case 4:
-                    strcpy(lso[pos].condicion,"Ausente");
-                    break;
-                }
-                printf("Se modifico la condicion del Alumno con exito\n");
-                system("pause");
-                system("cls");
-                break;
-
-            }
-        }
-        while(op!=5);
-        return 0;   //modificar exitoso
-    }
-    return 1;   //no se encontro el alumno a modificar
-}
 #endif // LSO_H_INCLUDED

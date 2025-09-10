@@ -1,12 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "LSO.h"
+#include "LIBB"
 
-int Precarga(Alumno LSO[], int *cant)
+void gotoxy(int x, int y)
 {
-    int i;
+    printf("%c[%d;%df", 0x1B, y, x);
+}
+
+
+int compararEstructuras(Alumno LSO[], int *cantLSO)
+{
+    int i, op=0;
+    char codigo[8];
     Alumno aux;
-    FILE* fp = fopen("Operaciones.txt", "r");
+    FILE* fp = fopen("Prueba.txt", "r");
+
+    (*cantLSO)=0;
+
+    int altaLSO=0, bajaLSO=0, evocarLSO=0, maxaltaLSO=0, maxbajaLSO=0, maxevocarELSO=0, maxevocarFLSO=0;
+    float sumaAltaLSO=0, sumaBajaLSO=0, sumaEvocarELSO=0, sumaEvocarFLSO=0;
+    int cantAltaLSO=0, cantBajaLSO=0, cantEvocarELSO=0, cantEvocarFLSO=0;
+
     if(fp==NULL)
     {
         printf("No se encontro el archivo\n");
@@ -20,38 +35,233 @@ int Precarga(Alumno LSO[], int *cant)
 
         while(!feof(fp))
         {
-            do
+            fscanf(fp, "%d", &op);
+
+            //se fija que numero hay en el archivo para hacer las altas y bajass
+            if(op== 1|| op==2)
             {
-                fscanf(fp," %[^\n]",aux.codigo);
+
+                do
+                {
+                    fscanf(fp," %[^\n]",aux.codigo);
+                }
+                while(strlen(aux.codigo)>7 || strlen(aux.codigo)<1);
+
+                fscanf(fp," %[^\n]",aux.nombre);
+
+                fscanf(fp," %[^\n]",aux.correo);
+
+                fscanf(fp," %d",&aux.nota);
+
+                fscanf(fp," %[^\n]",aux.condicion);
+
+                for(int i = 0; aux.codigo[i] != '\0'; i++)
+                    aux.codigo[i] = toupper(aux.codigo[i]);
+                for(int i = 0; aux.nombre[i] != '\0'; i++)
+                    aux.nombre[i] = toupper(aux.nombre[i]);
+                for(int i = 0; aux.correo[i] != '\0'; i++)
+                    aux.correo[i] = toupper(aux.correo[i]);
+                for(int i = 0; aux.condicion[i] != '\0'; i++)
+                    aux.condicion[i] = toupper(aux.condicion[i]);
+
+                if(op==1)                              //Alta
+                {
+                    if(AltaLSO(aux,LSO,cantLSO,&altaLSO)==0)
+                    {
+
+                        //sumar para el promedio
+                        sumaAltaLSO = sumaAltaLSO + altaLSO;
+
+                        //calcular el maximo
+                        if(altaLSO>maxaltaLSO)
+                        {
+                            maxaltaLSO = altaLSO;
+                        }
+                        cantAltaLSO++;
+                    }
+
+                    //init
+                    altaLSO = 0;
+                }
+                else                                    //Baja
+                {
+                    if(BajaLSO(aux,LSO,cantLSO,&bajaLSO)==0)
+                    {
+
+                        //sumar para el promedio
+                        sumaBajaLSO = sumaBajaLSO + bajaLSO;
+
+                        //calcular el maximo
+                        if(bajaLSO>maxbajaLSO)
+                        {
+                            maxbajaLSO = bajaLSO;
+                        }
+                        cantBajaLSO++;
+                    }
+
+                    bajaLSO = 0;
+                }
             }
-            while(strlen(aux.codigo)>7 || strlen(aux.codigo)<1);
-
-            fscanf(fp," %[^\n]",aux.nombre);
-
-            fscanf(fp," %[^\n]",aux.correo);
-
-            fscanf(fp," %d",&aux.nota);
-
-            fscanf(fp," %[^\n]",aux.condicion);
-
-            for(int i = 0; aux.codigo[i] != '\0'; i++)
-                aux.codigo[i] = toupper(aux.codigo[i]);
-            for(int i = 0; aux.nombre[i] != '\0'; i++)
-                aux.nombre[i] = toupper(aux.nombre[i]);
-            for(int i = 0; aux.correo[i] != '\0'; i++)
-                aux.correo[i] = toupper(aux.correo[i]);
-            for(int i = 0; aux.condicion[i] != '\0'; i++)
-                aux.condicion[i] = toupper(aux.condicion[i]);
-
-            if(aux.nota>=0 && aux.nota<=10)
+            else
             {
-                AltaLSO(aux,LSO,cant);
+                fscanf(fp, " %[^\n]", codigo);
+                for(int i = 0; codigo[i] != '\0'; i++)
+                    codigo[i] = toupper(codigo[i]);
+
+                if(EvocarLSO(&aux,LSO,codigo,*cantLSO, &evocarLSO)==0)      //Evocar Exitoso
+                {
+
+                    //sumar para promedio
+                    sumaEvocarELSO = sumaEvocarELSO + evocarLSO;
+
+                    //calcular el maximo
+                    if(evocarLSO>maxevocarELSO)
+                    {
+                        maxevocarELSO = evocarLSO;
+                    }
+                    cantEvocarELSO++;
+                }
+                else                                                         //Evocar Fracaso
+                {
+
+                    //sumar para el promedio
+                    sumaEvocarFLSO = sumaEvocarFLSO + evocarLSO;
+
+                    //calculucar el maximo
+                    if(evocarLSO>maxevocarFLSO)
+                    {
+                        maxevocarFLSO = evocarLSO;
+                    }
+                    cantEvocarFLSO++;
+                }
+
+                evocarLSO = 0;
+
             }
 
         }
         fclose(fp);
-        return 1;
+
+        //LSO
+        printf("// Lista secuencial ordenada con busqueda binaria\n");
+        gotoxy(0,2);
+
+        //COSTOS MAXIMOS
+        printf("// Costos maximos ->");
+        gotoxy(25,2);
+        printf("Evocacion Exitosa= %d", maxevocarELSO);
+        gotoxy(55,2);
+        printf("Evocacion Fracaso= %d", maxevocarFLSO);
+        gotoxy(85,2);
+        printf("Alta= %d", maxaltaLSO);
+        gotoxy(100,2);
+        printf("Baja= %d", maxbajaLSO);
+        gotoxy(0,3);
+
+        //COSTOS MEDIOS
+        printf("// Costos Medios  ->");
+        gotoxy(25,3);
+        if(cantEvocarELSO!=0)
+        {
+            printf("Evocacion Exitosa= %.2f", sumaEvocarELSO/cantEvocarELSO);
+        }
+        else
+        {
+            printf("Evocacion Exitosa= 0");
+        }
+        gotoxy(55,3);
+        if(cantEvocarFLSO!=0)
+        {
+            printf("Evocacion Fracaso= %.2f", sumaEvocarFLSO/cantEvocarFLSO);
+        }
+        else
+        {
+            printf("Evocacion Fracaso= 0");
+        }
+        gotoxy(85,3);
+        if(cantAltaLSO!=0)
+        {
+            printf("Alta= %.2f", sumaAltaLSO/cantAltaLSO);
+        }
+        else
+        {
+            printf("Alta= 0");
+        }
+        gotoxy(100,3);
+        if(cantBajaLSO!=0)
+        {
+            printf("Baja= %.2f", sumaBajaLSO/cantBajaLSO);
+        }
+        else
+        {
+            printf("Baja= 0");
+        }
+
+        /*gotoxy(0,5);
+        printf("// Lista secuencial ordenada con busqueda secuencial");
+        gotoxy(0,6);
+        printf("// Costos maximos ->");
+        gotoxy(25,6);
+        printf("Evocacion Exitosa= %d", maxEvoLSE);
+        gotoxy(55,6);
+        printf("Evocacion Fracaso= %d", maxEvoLSF);
+        gotoxy(85,6);
+        printf("Alta= %d", maxAltaLS);
+        gotoxy(100,6);
+        printf("Baja= %d", maxBajaLS);
+        gotoxy(0,7);
+        printf("// Costos Medios  ->");
+        gotoxy(25,7);
+
+        if(cantEvoELSO!=0) printf("Evocacion Exitosa= %.2f", sumaEvoLSE/cantEvoELSO);
+        else printf("Evocacion Exitosa= 0");
+
+        gotoxy(55,7);
+        if(cantEvoFLSO) printf("Evocacion Fracaso= %.2f", sumaEvoLSF/cantEvoFLSO);
+        else printf("Evocacion Fracaso= 0");
+
+        gotoxy(85,7);
+        if(cantAltaLSO!=0) printf("Alta= %.2f", sumaAltaLS/cantAltaLSO);
+        else printf("Alta= 0");
+
+        gotoxy(100,7);
+        if(cantBajaLSO!=0) printf("Baja= %.2f", sumaBajaLS/cantBajaLSO);
+        else printf("Baja= 0");
+
+        gotoxy(0,9);
+        printf("// Arbol binario de busqueda");
+        gotoxy(0,10);
+        printf("// Costos maximos ->");
+        gotoxy(25,10);
+        printf("Evocacion Exitosa= %d", maxEvoABE);
+        gotoxy(55,10);
+        printf("Evocacion Fracaso= %d", maxEvoABF);
+        gotoxy(85,10);
+        printf("Alta= %.2f", maxAltaAB);
+        gotoxy(100,10);
+        printf("Baja= %.2f", maxBajaAB);
+        gotoxy(0,11);
+        printf("// Costos Medios  ->");
+        gotoxy(25,11);
+
+        if(cantEvoEABB!=0) printf("Evocacion Exitosa= %.2f", sumaEvoABE/cantEvoEABB);
+        else printf("Evocacion Exitosa= 0");
+
+        gotoxy(55,11);
+        if(cantEvoFABB!=0) printf("Evocacion Fracaso= %.2f", sumaEvoABF/cantEvoFABB);
+        else printf("Evocacion Fracaso= 0");
+
+        gotoxy(85,11);
+        if(cantAltaABB!=0) printf("Alta= %.2f", sumaAltaAB/cantAltaABB);
+        else printf("Alta= 0");
+
+        gotoxy(100,11);
+        if(cantBajaABB!=0) printf("Baja= %.2f", sumaBajaAB/cantBajaABB);
+        else printf("Baja= 0");*/
+
+        gotoxy(0,13);
     }
+    return 1;
 }
 
 void MostraLSO(Alumno lso[],int cant)
@@ -81,9 +291,10 @@ void MostraLSO(Alumno lso[],int cant)
 int main()
 {
     Alumno LSO[TAM];
+    Alumno LIBT*[TAM];
     char codigo[8];
-    int opcion,condicion;
-    int cant=0,i, exito;
+    int opcion;
+    int cantLSO=0, cantLIBT=0;
     Alumno aux;
 
 
@@ -91,13 +302,11 @@ int main()
     do
     {
         printf("Seleccione una opcion\n");
-        printf("1- Ingresar Nuevo Alumno\n");
-        printf("2- Eliminar Alumno existente\n");
-        printf("3- Modificar datos de un Alumno\n");
-        printf("4- Consultar informacion de un Alumno\n");
-        printf("5- Memorizacion Previa\n");
-        printf("6- Mostrar Estructura\n");
-        printf("7- Salir\n");
+        printf("1- Comparar Estructuras\n");
+        printf("2- Mostrar Lista Secuencial Ordenada\n");
+        printf("3- Mostrar Lista Invertida con Busqueda Binaria\n");
+        printf("4- Mostrar Arbol Binario de busqueda\n");
+        printf("5- Salir\n");
         printf("Opcion: ");
         scanf("%d",&opcion);
         fflush(stdin);
@@ -106,207 +315,18 @@ int main()
         switch (opcion)
         {
         case 1:
-            if(cant==TAM)
-            {
-                printf("No se puede dar de Alta la estructura esta llena\n");
-            }
-            else
-            {
-                do
-                {
-                    printf("\nIngrese el codigo de Alumno: ");
-                    scanf(" %[^\n]",aux.codigo);
-                }
-                while(strlen(aux.codigo)>7 || strlen(aux.codigo)<1);
-                printf("%d",strlen(aux.codigo));
-                printf("\nIngrese Nombre y Apellido del Alumno: ");
-                scanf(" %[^\n]",aux.nombre);
-                printf("\nIngrese correo electronico del Alumno: ");
-                scanf(" %[^\n]",aux.correo);
-                printf("\nIngrese la nota del Alumno: ");
-                scanf("%d",&aux.nota);
-                fflush(stdin);
-                while(aux.nota<0 || aux.nota>10)
-                {
-                    printf("Nota invalida.\nIngrese una nota entre 0 y 10 :");
-                    scanf("%d",&aux.nota);
-                }
-                fflush(stdin);
-                printf("\nIngrese condicion del Alumno\n1.Promocion\n2.Regular\n3.Libre\n4.Ausente\n->");
-                scanf("%d",&condicion);
-                fflush(stdin);
-                while(condicion<1 || condicion>4)
-                {
-                    printf("\nCondicion no valida.\nIngrese condicion del Alumno\n1.Promocion\n2.Regular\n3.Libre\n4.Ausente\n->");
-                    scanf(" %d",&condicion);
-                }
-                fflush(stdin);
-
-                switch(condicion)
-                {
-                case 1:
-                    strcpy(aux.condicion,"Promocion");
-                    break;
-                case 2:
-                    strcpy(aux.condicion,"Regular");
-                    break;
-                case 3:
-                    strcpy(aux.condicion,"Libre");
-                    break;
-                case 4:
-                    strcpy(aux.condicion,"Ausente");
-                    break;
-                }
-
-
-                //Esto es para controles de Mayusculas y Minusculas
-                for(i=0; aux.codigo[i] != '\0'; i++)
-                    aux.codigo[i]=toupper(aux.codigo[i]);
-                for(i=0; aux.nombre[i] != '\0'; i++)
-                    aux.nombre[i]=toupper(aux.nombre[i]);
-                for(i=0; aux.correo[i] != '\0'; i++)
-                    aux.correo[i]=toupper(aux.correo[i]);
-
-                //Alta del alumno a la LSO
-                exito = AltaLSO(aux,LSO,&cant);
-            }
-            if(exito==1)
-            {
-                printf("Alumno repetido (Alta no exitosa)\n");
-            }
-            else
-            {
-                if(exito==0)
-                {
-                    printf("El Alumno se ha cargado correctamente\n");
-                }
-            }
+            compararEstructuras(LSO,&cantLSO,LIBT,&cantLIBT);
             system("pause");
             system("cls");
             break;
         case 2:
-
-            if(cant==0)
-            {
-                printf("No hay datos de Alumnos cargados en el sistema\n");
-                system("pause");
-            }
-            else
-            {
-                printf("\nIngrese el codigo del Alumno que desea eliminar: ");
-                scanf(" %[^\n]",aux.codigo);
-                for(i=0; aux.codigo[i] != '\0'; i++)
-                    aux.codigo[i]=toupper(aux.codigo[i]);
-                system("cls");
-
-                //Baja del alumno a eliminar
-                exito=BajaLSO(aux,LSO,&cant);
-
-                if(exito==0)
-                {
-                    printf("Se elimino el Alumno correctamente\n");
-                }
-                if(exito==2)
-                {
-                    printf("No se encontro Alumno con el codigo ingresado (Baja no exitosa)\n");
-                }
-                if(exito==1)
-                {
-                    printf("Operacion cancelada\n");
-                }
-                system("pause");
-            }
-            system("cls");
-            break;
-        case 3:
-            if(cant==0)
-            {
-                printf("No hay datos de Alumnos cargados en el sistema\n");
-                system("pause");
-            }
-            else
-            {
-                printf("\nIngrese el codigo del Alumno que quiere modificar: ");
-                scanf(" %[^\n]",codigo);
-                for(i=0; codigo[i] != '\0'; i++)
-                    codigo[i]=toupper(codigo[i]);
-
-                //Modificar el alumno
-                exito=ModificarLSO(LSO,codigo,cant);
-
-                if(exito==1)
-                {
-                    printf("No se encontro Alumno con el codigo ingresado\n");
-                }
-                system("pause");
-            }
-            system("cls");
-            break;
-        case 4:
-            if(cant==0)
-            {
-                printf("No hay datos de Alumnos cargados en el sistema\n");
-                system("pause");
-            }
-            else
-            {
-
-                printf("\nIngrese el codigo del Alumno que quiere consultar: ");
-                scanf(" %[^\n]",codigo);
-                for(i=0; codigo[i] != '\0'; i++)
-                    codigo[i]=toupper(codigo[i]);
-
-
-                //Evocar al alumno
-                if(EvocarLSO(&aux,LSO,codigo,cant)==0)
-                {
-                    printf("\nLos datos del Alumno ingresado son:");
-                    printf("\nCodigo del Alumno: %s", aux.codigo);
-                    printf("\nNombre y Apellido: %s", aux.nombre);
-                    printf("\nCorreo electronico: %s", aux.correo);
-                    printf("\nNota: %d", aux.nota);
-                    printf("\nCondicion Final: %s\n", aux.condicion);
-                }
-                else printf("\nNo se encontro Alumno con el codigo ingresado (Evocacion no Exitosa)\n");
-                system("pause");
-            }
-            system("cls");
-            break;
-        case 5:
-            if(cant==TAM)
-            {
-                printf("Sistema lleno\n");
-                system("pause");
-                system("cls");
-            }
-            else
-            {
-                if(Precarga(LSO, &cant)==1)
-                {
-                    printf("\nTodos los Alumnos fueron cargados con exito\n");
-                    system("pause");
-                    system("cls");
-                }
-            }
-            break;
-
-        case 6:
-            if(cant == 0)
-            {
-                printf("No hay datos de Alumnos cargados en el sistema\n");
-                system("pause");
-            }
-            else
-            {
-                MostraLSO(LSO,cant);
-            }
-            system("cls");
+            MostraLSO(LSO,cantLSO);
             break;
 
 
         }
     }
-    while (opcion!=7);
+    while (opcion!=5);
 
     return 0;
 }
