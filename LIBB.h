@@ -38,7 +38,7 @@ int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas
     }
 }
 
-int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, int *corrimientos)
+int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
 {
     int pos,i;
     int celdas = 0;
@@ -54,12 +54,13 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, int *corrimientos)
         {
             return 3;       //fallo de asignacion de memoria
         }
-        if(LocalizarLIBT(aux.codigo,LIBT,&pos,*cant,&celdas)==1 && pos <=(*cant))
+        if(LocalizarLIBT(aux.codigo,LIBT,&pos,*cant,&celdas)==1)
         {
             for(i=(*cant); i>pos; i--)
             {
                 LIBT[i]=LIBT[i-1];
-                (*corrimientos)=(*corrimientos)+0,5;
+                (*corrimientos)=(*corrimientos)+0.5;
+
             }
 
             strcpy(aux1->codigo,aux.codigo);
@@ -79,7 +80,7 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, int *corrimientos)
     }
 }
 
-int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, int *corrimientos){
+int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos){
     int pos,i, celdas=0;
     if(LocalizarLIBT(aux.codigo,LIBT,&pos,*cant,&celdas)==0 && LIBT[pos]->nota == aux.nota && strcmp(LIBT[pos]->codigo, aux.codigo)==0 && strcmp(LIBT[pos]->condicion, aux.condicion)==0 && strcmp(LIBT[pos]->correo, aux.correo)==0 && strcmp(LIBT[pos]->nombre, aux.nombre)==0)
     {
@@ -88,14 +89,14 @@ int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, int *corrimientos){
         for(i=pos; i<(*cant)-1;i++)     //consultar por el cant - 1
             {
                 LIBT[i]=LIBT[i+1];
-                (*corrimientos)=(*corrimientos)+0,5;
+                (*corrimientos)=(*corrimientos)+0.5;
             }
         (*cant)--;
         free(aBorrar);
-        return 1;
+        return 0;               //baja exitosa
     }
     else
-        return 0;
+        return 1;               //baja no exitos
 }
 
 int EvocarLIBT(Alumno *aux,Alumno *LIBT[],char codigo[],int cant, int *celdas)
@@ -105,10 +106,10 @@ int EvocarLIBT(Alumno *aux,Alumno *LIBT[],char codigo[],int cant, int *celdas)
     if(LocalizarLIBT(codigo,LIBT,&pos,cant,celdas)==0)
     {
         *aux = *LIBT[pos];           //evocacion exitosa
-        return 1;
+        return 0;
     }
 
-    return 0;                       //evocacion no exitosa
+    return 1;                       //evocacion no exitosa
 }
 
 void LimpiarListaDePunteros(Alumno *Lista[], int *cantLista) {

@@ -14,3 +14,22 @@
 	<malloc.h>
 	<windows.h>
 
+1757815069 source:c:\users\maria\onedrive\escritorio\pm2-grupo1\main.c
+	<stdio.h>
+	<stdlib.h>
+	"LSO.h"
+	"LIBB.h"
+
+1757813056 c:\users\maria\onedrive\escritorio\pm2-grupo1\lso.h
+	"Alumno.h"
+
+1757795220 c:\users\maria\onedrive\escritorio\pm2-grupo1\alumno.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<malloc.h>
+	<windows.h>
+
+1757813838 c:\users\maria\onedrive\escritorio\pm2-grupo1\libb.h
+	"Alumno.h"
+

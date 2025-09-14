@@ -42,6 +42,7 @@ int AltaLSO(Alumno aux, Alumno lso[], int *cant, int *corrimientos)
             {
                 lso[i]=lso[i-1];
                 (*corrimientos)++;
+
             }
 
             lso[pos]=aux;
