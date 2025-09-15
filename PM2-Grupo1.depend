@@ -1,10 +1,11 @@
 # depslib dependency file v1.0
-1757531425 source:c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\main.c
+1757880677 source:c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"LSO.h"
+	"LIBB.h"
 
-1757530847 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\lso.h
+1757880677 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\lso.h
 	"Alumno.h"
 
 1757511702 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\alumno.h
@@ -31,5 +32,8 @@
 	<windows.h>
 
 1757813838 c:\users\maria\onedrive\escritorio\pm2-grupo1\libb.h
+	"Alumno.h"
+
+1757881187 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\libb.h
 	"Alumno.h"
 

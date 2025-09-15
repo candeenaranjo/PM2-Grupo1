@@ -1,5 +1,6 @@
 #ifndef LIBB_H_INCLUDED
 #define LIBB_H_INCLUDED
+#include <malloc.h>
 #include "Alumno.h"
 
 int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas)
@@ -24,12 +25,11 @@ int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas
         }
 
         m = (li+ls+1)/2;
-        (*celdas)++;
+        (*celdas)=(*celdas +2);
     }
     (*pos)= m;
-    if (li<=ls && strcmp(LIBT[m]->codigo,codigo)==0)
-    {
-        (*celdas)++;
+    if (li<=ls)
+        (*celdas)=(*celdas +2);
         return 0;               //localizacion exitosa
     }
     else
@@ -44,7 +44,7 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
     int celdas = 0;
     if((*cant)==TAM)
     {
-        return 2;           //lista llena no se puede dar de alta
+        return 2;                           //lista llena no se puede dar de alta
     }
     else
     {
@@ -52,7 +52,7 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
         aux1 = (Alumno *)malloc(sizeof(Alumno));
         if(aux1 == NULL)
         {
-            return 3;       //fallo de asignacion de memoria
+            return 3;                       //fallo de asignacion de memoria
         }
         if(LocalizarLIBT(aux.codigo,LIBT,&pos,*cant,&celdas)==1)
         {
@@ -70,27 +70,29 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
             strcpy(aux1->condicion,aux.condicion);
 
             LIBT[pos]=aux1;
-            (*cant)++;
-            return 0;         //alta exitosa del alumno
+            (*corrimientos)=(*corrimientos)+0.5;
+            return 0;                        //alta exitosa del alumno
         }
         else
         {
-            return 1;       //no se pudo dar de alta porque el alumno ya estaba cargado
+            free(aux1);
+            return 1;                       //no se pudo dar de alta porque el alumno ya estaba cargado
         }
     }
 }
 
-int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos){
+int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
+{
     int pos,i, celdas=0;
     if(LocalizarLIBT(aux.codigo,LIBT,&pos,*cant,&celdas)==0 && LIBT[pos]->nota == aux.nota && strcmp(LIBT[pos]->codigo, aux.codigo)==0 && strcmp(LIBT[pos]->condicion, aux.condicion)==0 && strcmp(LIBT[pos]->correo, aux.correo)==0 && strcmp(LIBT[pos]->nombre, aux.nombre)==0)
     {
-        Alumno *aBorrar = LIBT[pos];   // guardar puntero para liberar
+        Alumno *aBorrar = LIBT[pos];                // guardar puntero para liberar memoria
 
-        for(i=pos; i<(*cant)-1;i++)     //consultar por el cant - 1
-            {
-                LIBT[i]=LIBT[i+1];
-                (*corrimientos)=(*corrimientos)+0.5;
-            }
+        for(i=pos; i<(*cant)-1; i++)                //consultar por el cant - 1
+        {
+            LIBT[i]=LIBT[i+1];
+            (*corrimientos)=(*corrimientos)+0.5;
+        }
         (*cant)--;
         free(aBorrar);
         return 0;               //baja exitosa
@@ -112,9 +114,11 @@ int EvocarLIBT(Alumno *aux,Alumno *LIBT[],char codigo[],int cant, int *celdas)
     return 1;                       //evocacion no exitosa
 }
 
-void LimpiarListaDePunteros(Alumno *Lista[], int *cantLista) {
-    for (int i = 0; i < *cantLista; i++) {
-        free(Lista[i]);             // libera la memoria asignada dinámicamente
+void LimpiarListaDePunteros(Alumno *Lista[], int *cantLista)
+{
+    for (int i = 0; i < *cantLista; i++)
+    {
+        free(Lista[i]);              // libera la memoria asignada dinámicamente
         Lista[i] = NULL;             // evita punteros colgados
     }
     *cantLista = 0;                 // reinicia el contador de elementos
