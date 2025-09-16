@@ -32,5 +32,14 @@ void LiberarABB(Nodo* nodo) {
     free(nodo);
 }
 
+void barridoFree(NodoABB* nodo){
+    if(nodo!=NULL){
+        barridoFree(nodo->izquierda);
+        barridoFree(nodo->derecha);
+        free(nodo);
+    }
+}
+
+// HOLA NALA :)
 
 #endif // ABB_H_INCLUDED

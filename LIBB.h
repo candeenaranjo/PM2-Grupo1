@@ -28,7 +28,7 @@ int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas
         (*celdas)=(*celdas +2);
     }
     (*pos)= m;
-    if (li<=ls)
+    if (li<=ls){
         (*celdas)=(*celdas +2);
         return 0;               //localizacion exitosa
     }
