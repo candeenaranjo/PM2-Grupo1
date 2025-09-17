@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "LSO.h"
 #include "LIBB.h"
+#include "ABB.h"
 
 void gotoxy(int x, int y)
 {
@@ -9,7 +10,7 @@ void gotoxy(int x, int y)
 }
 
 
-int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIBT)
+int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, int *cantLIBT)
 {
     int i, op=0;
     char codigo[8];
@@ -19,6 +20,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIB
     (*cantLSO)=0;
     (*cantLIBT)=0;
 
+    LiberarABB(ABB->raiz);
     LimpiarListaDePunteros(LIBT,cantLIBT);
 
     //Variable costos LSO
@@ -30,6 +32,11 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIB
     int evocarLIBT=0, maxevocarELIBT=0, maxevocarFLIBT=0;
     float sumaAltaLIBT=0.0, sumaBajaLIBT=0.0, sumaEvocarELIBT=0.0, sumaEvocarFLIBT=0.0,altaLIBT=0.0, bajaLIBT=0.0,maxaltaLIBT=0.0, maxbajaLIBT=0.0;
     int cantAltaLIBT=0, cantBajaLIBT=0, cantEvocarELIBT=0, cantEvocarFLIBT=0;
+
+    //Variables costos ABB
+    float evocarABB=0.0, maxevocarEABB=0.0, maxevocarFABB=0.0;
+    float sumaAltaABB=0.0, sumaBajaABB=0.0, sumaEvocarEABB=0.0, sumaEvocarFABB=0.0,altaABB=0.0, bajaABB=0.0,maxaltaABB=0.0, maxbajaABB=0.0;
+    int cantAltaABB=0, cantBajaABB=0, cantEvocarEABB=0, cantEvocarFABB=0;
 
     if(fp==NULL)
     {
@@ -104,9 +111,26 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIB
                         }
                         cantAltaLIBT++;
                     }
+
+                    //ALTA ABB
+                    if(AltaABB(aux,ABB,&altaABB)==0)
+                    {
+
+                        //sumar para el promedio
+                        sumaAltaABB = sumaAltaABB + altaABB;
+
+                        //calcular el maximo
+                        if(altaABB>maxaltaABB)
+                        {
+                            maxaltaABB = altaABB;
+                        }
+                        cantAltaABB++;
+                    }
+
                     //init
                     altaLIBT = 0;
                     altaLSO = 0;
+                    altaABB = 0.0;
                 }
                 else                                    //Baja
                 {
@@ -210,6 +234,35 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIB
                     cantEvocarFLIBT++;
                 }
 
+                //EVOCAR ABB
+                if(EvocarABB(ABB,codigo,&aux,&evocarLIBT)==0)      //Evocar Exitoso
+                {
+
+                    //sumar para promedio
+                    sumaEvocarEABB = sumaEvocarEABB + evocarABB;
+
+                    //calcular el maximo
+                    if(evocarABB>maxevocarEABB)
+                    {
+                        maxevocarEABB = evocarABB;
+                    }
+                    cantEvocarEABB++;
+                }
+                else                                                         //Evocar Fracaso
+                {
+
+                    //sumar para el promedio
+                    sumaEvocarFABB = sumaEvocarFABB + evocarABB;
+
+                    //calculucar el maximo
+                    if(evocarABB>maxevocarFABB)
+                    {
+                        maxevocarFABB = evocarABB;
+                    }
+                    cantEvocarFABB++;
+                }
+
+                evocarABB = 0.0;
                 evocarLSO = 0;
                 evocarLIBT = 0;
             }
@@ -327,37 +380,62 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[], int *cantLSO, int *cantLIB
         {
             printf("Baja= 0");
         }
-
-        /*gotoxy(0,9);
+        //ABB
+        gotoxy(0,9);
         printf("// Arbol binario de busqueda");
         gotoxy(0,10);
+        //COSTOS MAXIMOS
         printf("// Costos maximos ->");
         gotoxy(25,10);
-        printf("Evocacion Exitosa= %d", maxEvoABE);
+        printf("Evocacion Exitosa= %.2f", maxevocarEABB);
         gotoxy(55,10);
-        printf("Evocacion Fracaso= %d", maxEvoABF);
+        printf("Evocacion Fracaso= %.2f", maxevocarFABB);
         gotoxy(85,10);
-        printf("Alta= %.2f", maxAltaAB);
+        printf("Alta= %.2f", maxaltaABB);
         gotoxy(100,10);
-        printf("Baja= %.2f", maxBajaAB);
+        printf("Baja= %.2f", maxbajaABB);
         gotoxy(0,11);
+        //COSTOS MEDIOS
         printf("// Costos Medios  ->");
         gotoxy(25,11);
-
-        if(cantEvoEABB!=0) printf("Evocacion Exitosa= %.2f", sumaEvoABE/cantEvoEABB);
-        else printf("Evocacion Exitosa= 0");
+        if(cantEvocarEABB!=0)
+        {
+            printf("Evocacion Exitosa= %.2f", sumaEvocarEABB/cantEvocarEABB);
+        }
+        else
+        {
+            printf("Evocacion Exitosa= 0");
+        }
 
         gotoxy(55,11);
-        if(cantEvoFABB!=0) printf("Evocacion Fracaso= %.2f", sumaEvoABF/cantEvoFABB);
-        else printf("Evocacion Fracaso= 0");
+        if(cantEvocarFABB!=0)
+        {
+            printf("Evocacion Fracaso= %.2f", sumaEvocarFABB/cantEvocarFABB);
+        }
+        else
+        {
+            printf("Evocacion Fracaso= 0");
+        }
 
         gotoxy(85,11);
-        if(cantAltaABB!=0) printf("Alta= %.2f", sumaAltaAB/cantAltaABB);
-        else printf("Alta= 0");
+        if(cantAltaABB!=0)
+        {
+            printf("Alta= %.2f", sumaAltaABB/cantAltaABB);
+        }
+        else
+        {
+            printf("Alta= 0");
+        }
 
         gotoxy(100,11);
-        if(cantBajaABB!=0) printf("Baja= %.2f", sumaBajaAB/cantBajaABB);
-        else printf("Baja= 0");*/
+        if(cantBajaABB!=0)
+        {
+            printf("Baja= %.2f", sumaBajaABB/cantBajaABB);
+        }
+        else
+        {
+            printf("Baja= 0");
+        }
 
         gotoxy(0,13);
     }
@@ -368,6 +446,8 @@ int main()
 {
     Alumno LSO[TAM];
     Alumno *LIBT[TAM];
+    Arbol arbol;
+    InitABB(&arbol);
     char codigo[8];
     int opcion,i=1;
     int cantLSO=0, cantLIBT=0;
@@ -391,7 +471,7 @@ int main()
         switch (opcion)
         {
         case 1:
-            compararEstructuras(LSO,LIBT,&cantLSO,&cantLIBT);
+            compararEstructuras(LSO,LIBT,&arbol,&cantLSO,&cantLIBT);
             system("pause");
             system("cls");
             break;
@@ -419,6 +499,13 @@ int main()
                     system("pause");
                 }
             }
+            system("pause");
+            system("cls");
+            break;
+        case 4:
+            i=1;
+            if(arbol.raiz==NULL) printf("Arbol vacio\n");
+            Barrido(arbol.raiz, &i);
             system("pause");
             system("cls");
             break;
