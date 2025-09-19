@@ -70,7 +70,8 @@ int AltaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
             strcpy(aux1->condicion,aux.condicion);
 
             LIBT[pos]=aux1;
-            (*corrimientos)=(*corrimientos)+0.5;
+            //(*corrimientos)=(*corrimientos)+0.5;
+            (*cant)++;
             return 0;                        //alta exitosa del alumno
         }
         else

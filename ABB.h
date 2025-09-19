@@ -111,6 +111,10 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
     }
 }
 
+int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones){
+
+}
+
 int EvocarABB(Arbol *ABB, char codigo[], Alumno *alumno, float *celdas)
 {
     Nodo* pos = ABB->raiz;
