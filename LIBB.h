@@ -3,7 +3,7 @@
 #include <malloc.h>
 #include "Alumno.h"
 
-int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas)
+int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int *celdas)
 {
     (*pos)=0;
     (*celdas)=0;
@@ -25,11 +25,11 @@ int LocalizarLIBT(char codigo[], Alumno *LIBT[], int* pos, int cant, int* celdas
         }
 
         m = (li+ls+1)/2;
-        (*celdas)=(*celdas +2);
+        (*celdas)=(*celdas)+2;
     }
     (*pos)= m;
     if (li<=ls){
-        (*celdas)=(*celdas +2);
+        (*celdas)=(*celdas) +2;
         return 0;               //localizacion exitosa
     }
     else
@@ -104,7 +104,7 @@ int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
 int EvocarLIBT(Alumno *aux,Alumno *LIBT[],char codigo[],int cant, int *celdas)
 {
     int pos;
-
+    printf("Costos evocacion %d",*celdas);
     if(LocalizarLIBT(codigo,LIBT,&pos,cant,celdas)==0)
     {
         *aux = *LIBT[pos];           //evocacion exitosa

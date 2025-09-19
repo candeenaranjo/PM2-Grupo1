@@ -21,11 +21,12 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     (*cantLIBT)=0;
 
     LiberarABB(ABB->raiz);
+    ABB->raiz = NULL;
     LimpiarListaDePunteros(LIBT,cantLIBT);
 
     //Variable costos LSO
     int altaLSO=0, bajaLSO=0, evocarLSO=0, maxaltaLSO=0, maxbajaLSO=0, maxevocarELSO=0, maxevocarFLSO=0;
-    float sumaAltaLSO=0, sumaBajaLSO=0, sumaEvocarELSO=0, sumaEvocarFLSO=0;
+    float sumaAltaLSO=0.0, sumaBajaLSO=0.0, sumaEvocarELSO=0.0, sumaEvocarFLSO=0.0;
     int cantAltaLSO=0, cantBajaLSO=0, cantEvocarELSO=0, cantEvocarFLSO=0;
 
     //Variables costos LIBT
@@ -235,7 +236,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
                 }
 
                 //EVOCAR ABB
-                if(EvocarABB(ABB,codigo,&aux,&evocarLIBT)==0)      //Evocar Exitoso
+                if(EvocarABB(ABB,codigo,&aux,&evocarABB)==0)      //Evocar Exitoso
                 {
 
                     //sumar para promedio
@@ -309,7 +310,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
         gotoxy(85,3);
         if(cantAltaLSO!=0)
         {
-            printf("Alta= %.2f", sumaAltaLSO/cantAltaLIBT);
+            printf("Alta= %.2f", sumaAltaLSO/cantAltaLSO);
         }
         else
         {

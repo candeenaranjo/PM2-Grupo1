@@ -111,11 +111,13 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
     }
 }
 
-int EvocarABB(Arbol *ABB, char codigo[], Alumno *alumno, float *celdas){
+int EvocarABB(Arbol *ABB, char codigo[], Alumno *alumno, float *celdas)
+{
     Nodo* pos = ABB->raiz;
     Nodo* aux = NULL;
 
-    if(LocalizarABB(codigo, ABB, celdas)){
+    if(LocalizarABB(codigo, ABB, celdas)==0)
+    {
         (*alumno) = ABB->cursor->alumno;             //PREGUNTAR-> le estoy asignando el dato? o la direccion?
         return 0;               //evocacion exitosa
     }
@@ -132,16 +134,19 @@ void BarridoPreorden(Nodo* nodo)
     }
 }
 
-void Barrido(Nodo* nodo, int *i) {
+void Barrido(Nodo* nodo, int *i)
+{
 
-    if (nodo != NULL) {
-        printf("Codigo: %s\nNombre: %s\nCorreo: %s\Nota: %d\nCondicion: %s\n", nodo->alumno.codigo, nodo->alumno.nombre, nodo->alumno.correo, nodo->alumno.nota, nodo->alumno.condicion);
+    if (nodo != NULL)
+    {
+        printf("Codigo: %s\nNombre: %s\nCorreo: %s\nNota: %d\nCondicion: %s\n", nodo->alumno.codigo, nodo->alumno.nombre, nodo->alumno.correo, nodo->alumno.nota, nodo->alumno.condicion);
         if(nodo->hijoIzq!=NULL)printf("Hijo izquierdo: %s\n", nodo->hijoIzq->alumno.codigo);
         else printf("Hijo izquierdo: No tiene\n");
         if(nodo->hijoDer!=NULL)printf("Hijo derecho: %s\n\n", nodo->hijoDer->alumno.codigo);
         else printf("Hijo derecho: No tiene\n\n");
 
-        if(*i%3==0){
+        if(*i%3==0)
+        {
             system("pause");
             printf("\n");
         }
