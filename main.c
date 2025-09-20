@@ -15,13 +15,13 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     int i, op=0;
     char codigo[8];
     Alumno aux;
-    FILE* fp = fopen("Prueba.txt", "r");
+    FILE* fp = fopen("Operaciones.txt", "r");
 
     (*cantLSO)=0;
     (*cantLIBT)=0;
 
-    LiberarABB(ABB->raiz);
-    ABB->raiz = NULL;
+    Barrido(ABB->raiz);
+    InitABB(ABB);
     LimpiarListaDePunteros(LIBT,cantLIBT);
 
     //Variable costos LSO
@@ -166,7 +166,22 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
                         cantBajaLIBT++;
                     }
 
+                    //BAJA ABB
+                    if(BajaABB(aux,ABB,&bajaABB)==0)
+                    {
 
+                        //sumar para el promedio
+                        sumaBajaABB = sumaBajaABB + bajaABB;
+
+                        //calcular el maximo
+                        if(bajaABB>maxbajaABB)
+                        {
+                            maxbajaABB = bajaABB;
+                        }
+                        cantBajaABB++;
+                    }
+
+                    bajaABB = 0;
                     bajaLSO = 0;
                     bajaLIBT = 0;
                 }
@@ -448,7 +463,6 @@ int main()
     Alumno LSO[TAM];
     Alumno *LIBT[TAM];
     Arbol arbol;
-    InitABB(&arbol);
     char codigo[8];
     int opcion,i=1;
     int cantLSO=0, cantLIBT=0;
@@ -506,7 +520,7 @@ int main()
         case 4:
             i=1;
             if(arbol.raiz==NULL) printf("Arbol vacio\n");
-            Barrido(arbol.raiz, &i);
+            BarridoPreorden(arbol.raiz, &i);
             system("pause");
             system("cls");
             break;

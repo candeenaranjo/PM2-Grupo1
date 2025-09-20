@@ -105,7 +105,6 @@ int BajaLIBT(Alumno aux, Alumno *LIBT[], int *cant, float *corrimientos)
 int EvocarLIBT(Alumno *aux,Alumno *LIBT[],char codigo[],int cant, int *celdas)
 {
     int pos;
-    printf("Costos evocacion %d",*celdas);
     if(LocalizarLIBT(codigo,LIBT,&pos,cant,celdas)==0)
     {
         *aux = *LIBT[pos];           //evocacion exitosa

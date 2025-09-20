@@ -12,7 +12,6 @@ typedef struct nodo
 
 typedef struct Arbol
 {
-
     Nodo* raiz;
     Nodo* cursor;
     Nodo* padre;
@@ -26,34 +25,23 @@ void InitABB(Arbol *a)
     a->cursor=NULL;
     a->cant=0;
 }
-void LiberarABB(Nodo* nodo)
-{
-    if (nodo == NULL)
-    {
-        return;
-    }
-    LiberarABB(nodo->hijoIzq);
-    LiberarABB(nodo->hijoDer);
-    free(nodo);
-}
 
-int LocalizarABB(char codigo[], Arbol* ABB, float *celdas)
+int LocalizarABB(char codigo[], Arbol *ABB, float *celdas)
 {
     ABB->cursor = ABB->raiz;
-    ABB->padre = ABB->raiz;
+    ABB->padre = NULL;
 
     while((ABB->cursor != NULL) && (strcmp(ABB->cursor->alumno.codigo, codigo) != 0))
     {
+        ABB->padre = ABB->cursor;
 
         if(strcmp(ABB->cursor->alumno.codigo, codigo)>0 )
         {
-            ABB->padre = ABB->cursor;
-            ABB->cursor = ABB->cursor->hijoIzq;
+            (*ABB).cursor = ABB->cursor->hijoIzq;
         }
         else
         {
-            ABB->padre = ABB->cursor;
-            ABB->cursor = ABB->cursor->hijoDer;
+            (*ABB).cursor = ABB->cursor->hijoDer;
         }
         (*celdas) += 1;
 
@@ -61,6 +49,7 @@ int LocalizarABB(char codigo[], Arbol* ABB, float *celdas)
 
     if(ABB->cursor != NULL)
     {
+
         (*celdas) += 1;
         return 0;               //localizacion exitosa
     }
@@ -111,7 +100,147 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
     }
 }
 
-int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones){
+int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
+{
+    float celdas = 0.0;
+    Nodo *auxPadre, *auxCursor;
+
+    if(LocalizarABB(eliminar.codigo,ABB,&celdas)==0 && strcmp(eliminar.codigo, ABB->cursor->alumno.codigo)==0 && strcmp(eliminar.nombre, ABB->cursor->alumno.nombre)==0 && strcmp(eliminar.correo, ABB->cursor->alumno.correo)==0 && strcmp(eliminar.condicion, ABB->cursor->alumno.condicion)==0 && eliminar.nota == ABB->cursor->alumno.nota)
+    {
+
+        if(ABB->cursor->hijoDer!=NULL || ABB->cursor->hijoIzq!=NULL)    //arbol vacio
+        {
+
+            //Caso 1: eliminar nodo sin hijos
+            if((ABB->cursor->hijoIzq == NULL) && (ABB->cursor->hijoDer == NULL))
+            {
+                if(ABB->cursor == ABB->raiz)
+                {
+
+                    free((void*)(ABB->cursor));
+                    ABB->raiz = NULL;
+                    (*modificaciones) +=0.5;
+                    return 0;
+                }
+                else
+                {
+
+                    if(ABB->padre->hijoIzq == ABB->cursor)   //borrar nodo de la izquierda del padre
+                    {
+                        ABB->padre->hijoIzq = NULL;
+                        free((void*)(ABB->cursor));
+                        (*modificaciones) +=0.5;
+                        return 0;
+                    }
+                    else
+                    {
+                        ABB->padre->hijoDer = NULL;         //borrar nodo de la derecha del padre
+                        free((void*)(ABB->cursor));
+                        (*modificaciones) +=0.5;
+                        return 0;
+                    }
+                }
+
+            }
+            //Caso 2: bajar nodo con hijo derecho
+            if((ABB->cursor->hijoIzq == NULL) && (ABB->cursor->hijoDer != NULL))
+            {
+                if(ABB->cursor == ABB->raiz)
+                {
+                    ABB->raiz = ABB->cursor->hijoDer;
+                    free((void*)(ABB->cursor));
+                    (*modificaciones) +=0.5;
+                    return 0;
+                }
+                else
+                {
+
+                    if(ABB->padre->hijoIzq ==  ABB->cursor)         //borrar nodo de la izquierda del padre
+                    {
+                        ABB->padre->hijoIzq = ABB->cursor->hijoDer;
+                        free((void*)(ABB->cursor));
+                        (*modificaciones) +=0.5;
+                        return 0;
+                    }
+                    else
+                    {
+                        ABB->padre->hijoDer = ABB->cursor->hijoDer;  //borrar nodo de la derecha del padre
+                        free((void*)(ABB->cursor));
+                        (*modificaciones) +=0.5;
+                        return 0;
+                    }
+                }
+
+            }
+            //Caso 2: bajar nodo con hijo izquierdo
+            else
+            {
+                if((ABB->cursor->hijoIzq !=NULL) && (ABB->cursor->hijoDer == NULL))
+                {
+                    if(ABB->cursor == ABB->raiz)
+                    {
+                        ABB->raiz = ABB->cursor->hijoIzq;
+                        free((void*)(ABB->cursor));
+                        (*modificaciones) +=0.5;
+                        return 0;
+                    }
+                    else
+                    {
+
+                        if(ABB->padre->hijoIzq ==  ABB->cursor)
+                        {
+                            ABB->padre->hijoIzq = ABB->cursor->hijoIzq;     //borrar nodo de la izquierda del padre
+                            free((void*)(ABB->cursor));
+                            (*modificaciones) +=0.5;
+                            return 0;
+                        }
+                        else
+                        {
+                            ABB->padre->hijoDer = ABB->cursor->hijoIzq;     //borrar nodo de la derecha del padre
+                            free((void*)(ABB->cursor));
+                            (*modificaciones) +=0.5;
+                            return 0;
+                        }
+                    }
+
+
+                }
+
+            }
+            //caso 3: bajar nodo con 2 hijos
+            if((ABB->cursor->hijoIzq != NULL) && (ABB->cursor->hijoDer != NULL))
+            {
+
+                auxCursor = ABB->cursor->hijoIzq;
+                auxPadre = ABB->cursor;
+                while(auxCursor->hijoDer !=NULL)
+                {
+                    auxPadre = auxCursor;
+                    auxCursor = auxCursor->hijoDer;
+                }
+                ABB->cursor->alumno = auxCursor->alumno;
+                (*modificaciones)+=1;
+                if(auxPadre->hijoDer == auxCursor)
+                {
+                    auxPadre->hijoDer = auxCursor->hijoIzq;
+                }
+                else //caso eliminar raiz
+                {
+                    auxPadre->hijoIzq = auxCursor->hijoIzq;
+                }
+                (*modificaciones) +=0.5;
+                free((void*)(auxCursor));
+                return 0;
+            }
+
+        }
+        return 2;       //baja no exitosa por arbol vacio
+    }
+    else
+    {
+        return 1;       //baja no exitosa
+    }
+
 
 }
 
@@ -128,17 +257,17 @@ int EvocarABB(Arbol *ABB, char codigo[], Alumno *alumno, float *celdas)
     return 1;                   //evocacion no exitosa
 }
 
-void BarridoPreorden(Nodo* nodo)
+void Barrido(Nodo* nodo)
 {
     if(nodo!=NULL)
     {
-        BarridoPreorden(nodo->hijoIzq);
-        BarridoPreorden(nodo->hijoDer);
+        Barrido(nodo->hijoIzq);
+        Barrido(nodo->hijoDer);
         free(nodo);
     }
 }
 
-void Barrido(Nodo* nodo, int *i)
+void BarridoPreorden(Nodo* nodo, int *i)
 {
 
     if (nodo != NULL)
@@ -148,17 +277,16 @@ void Barrido(Nodo* nodo, int *i)
         else printf("Hijo izquierdo: No tiene\n");
         if(nodo->hijoDer!=NULL)printf("Hijo derecho: %s\n\n", nodo->hijoDer->alumno.codigo);
         else printf("Hijo derecho: No tiene\n\n");
-
         if(*i%3==0)
         {
             system("pause");
             printf("\n");
         }
         (*i)++;
-
-        Barrido(nodo->hijoIzq, i);
-        Barrido(nodo->hijoDer, i);
+        BarridoPreorden(nodo->hijoIzq, i);
+        BarridoPreorden(nodo->hijoDer, i);
     }
+
 }
 
 
