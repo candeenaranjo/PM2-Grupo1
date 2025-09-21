@@ -20,13 +20,13 @@
  Costos Medios  ->    Evocacion Exitosa= 6.28       Evocacion Fracaso= 6.14       Alta= 0.50     Baja= 1.12
 
  Analizando los resultados obtenidos podemos ver una gran diferencia en los costos de las listas con el ABB,
- por lo que la mejor estructura para localizaciones, altas y bajas sería el ABB. Pero podemos hacer un analisis
- entre las dos listas. Podemos ver que la LIBT tiene costos menores que la LSO, puntualmente en las altas y las
- bajas abjservamos que los costos de la LSO son el doble que los de la LIBT, esto se debe a que la LIBT es mas
- eficiente al tener direcciones de memoria, por lo que las modificaciones cuestan menos al modificar punteros y
- no correr celdas. En relacion a las evocaciones, la LIBT tine costos muy bajos, ya que la estrategia de busqueda
- es muchos mas eficiciente y menos costosa. En conclusion la mejor estructura en este caso es el ABB, pero si
- hacemos una comparacion de ambas listas, la mejor seria la LIBT.
+ por lo que la mejor estructura para localizaciones, altas y bajas sería el ABB (en este caso). Pero podemos
+ hacer un analisis entre las dos listas. Podemos ver que la LIBT tiene costos menores que la LSO, puntualmente
+ en las altas y las bajas observamos que los costos de la LSO son el doble que los de la LIBT, esto se debe a
+ que la LIBT es mas eficiente al tener direcciones de memoria, por lo que las modificaciones cuestan menos al
+ modificar punteros y no correr celdas. En relacion a las evocaciones, la LIBT tine costos muy bajos, ya que
+ la estrategia de busqueda es mucho mas eficiciente y menos costosa. En conclusion la mejor estructura en este
+ caso es el ABB, pero si hacemos una comparacion de ambas listas, la mejor seria la LIBT.
 */
 void gotoxy(int x, int y)
 {
