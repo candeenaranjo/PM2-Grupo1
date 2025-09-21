@@ -30,6 +30,7 @@ int LocalizarABB(char codigo[], Arbol *ABB, float *celdas)
 {
     ABB->cursor = ABB->raiz;
     ABB->padre = NULL;
+    (*celdas)=0;
 
     while((ABB->cursor != NULL) && (strcmp(ABB->cursor->alumno.codigo, codigo) != 0))
     {
@@ -62,7 +63,7 @@ int LocalizarABB(char codigo[], Arbol *ABB, float *celdas)
 int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
 {
 
-    float celdas = 0.0;
+    float celdas = 0;
     Nodo *aux= (Nodo*)malloc(sizeof(Nodo));
     if (aux == NULL)
     {
@@ -78,7 +79,7 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
             if(ABB->raiz == NULL)
             {
                 ABB->raiz = aux;
-                (*modificaciones) +=0.5;
+                (*modificaciones)=0.5;
                 return 0;           //alta exitosa
             }
             else if(strcmp(ABB->padre->alumno.codigo, aux->alumno.codigo) > 0 )
@@ -89,7 +90,7 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
             {
                 ABB->padre->hijoDer = aux;
             }
-            (*modificaciones) +=0.5;
+            (*modificaciones)= 0.5;
             return 0;               //alta exitosa
         }
         else
@@ -102,7 +103,7 @@ int AltaABB(Alumno nuevo, Arbol* ABB, float *modificaciones)
 
 int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
 {
-    float celdas = 0.0;
+    float celdas = 0;
     Nodo *auxPadre, *auxCursor;
 
     if(LocalizarABB(eliminar.codigo,ABB,&celdas)==0 && strcmp(eliminar.codigo, ABB->cursor->alumno.codigo)==0 && strcmp(eliminar.nombre, ABB->cursor->alumno.nombre)==0 && strcmp(eliminar.correo, ABB->cursor->alumno.correo)==0 && strcmp(eliminar.condicion, ABB->cursor->alumno.condicion)==0 && eliminar.nota == ABB->cursor->alumno.nota)

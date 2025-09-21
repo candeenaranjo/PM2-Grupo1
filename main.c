@@ -4,11 +4,34 @@
 #include "LIBB.h"
 #include "ABB.h"
 
+/*
+                Practico de Maquina 2 - Dones Bautista y Naranjo Candela - Grupo 1
+
+ Lista secuencial ordenada
+ Costos maximos ->    Evocacion Exitosa= 100        Evocacion Fracaso= 70         Alta= 91       Baja= 91
+ Costos Medios  ->    Evocacion Exitosa= 45.13      Evocacion Fracaso= 23.19      Alta= 23.01    Baja= 22.38
+
+ Lista Invertida con Busqueda por Triseccion
+ Costos maximos ->    Evocacion Exitosa= 14         Evocacion Fracaso= 14         Alta= 45.50    Baja= 45.50
+ Costos Medios  ->    Evocacion Exitosa= 11.18      Evocacion Fracaso= 10.32      Alta= 11.51    Baja= 11.19
+
+ Arbol binario de busqueda
+ Costos maximos ->    Evocacion Exitosa= 12.00      Evocacion Fracaso= 11.00      Alta= 0.50     Baja= 1.50
+ Costos Medios  ->    Evocacion Exitosa= 6.28       Evocacion Fracaso= 6.14       Alta= 0.50     Baja= 1.12
+
+ Analizando los resultados obtenidos podemos ver una gran diferencia en los costos de las listas con el ABB,
+ por lo que la mejor estructura para localizaciones, altas y bajas sería el ABB. Pero podemos hacer un analisis
+ entre las dos listas. Podemos ver que la LIBT tiene costos menores que la LSO, puntualmente en las altas y las
+ bajas abjservamos que los costos de la LSO son el doble que los de la LIBT, esto se debe a que la LIBT es mas
+ eficiente al tener direcciones de memoria, por lo que las modificaciones cuestan menos al modificar punteros y
+ no correr celdas. En relacion a las evocaciones, la LIBT tine costos muy bajos, ya que la estrategia de busqueda
+ es muchos mas eficiciente y menos costosa. En conclusion la mejor estructura en este caso es el ABB, pero si
+ hacemos una comparacion de ambas listas, la mejor seria la LIBT.
+*/
 void gotoxy(int x, int y)
 {
     printf("%c[%d;%df", 0x1B, y, x);
 }
-
 
 int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, int *cantLIBT)
 {
@@ -21,6 +44,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     (*cantLIBT)=0;
 
     Barrido(ABB->raiz);
+    ABB->raiz = NULL;
     InitABB(ABB);
     LimpiarListaDePunteros(LIBT,cantLIBT);
 
@@ -131,7 +155,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
                     //init
                     altaLIBT = 0;
                     altaLSO = 0;
-                    altaABB = 0.0;
+                    altaABB = 0;
                 }
                 else                                    //Baja
                 {

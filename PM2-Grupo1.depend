@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1758334778 source:c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\main.c
+1758495082 source:c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"LSO.h"
@@ -41,7 +41,7 @@
 	<malloc.h>
 	"Alumno.h"
 
-1758335895 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\abb.h
+1758377447 c:\users\leandro naranjo\onedrive\escritorio\cande universidad\2025\eda\prctico de maquina 2\pm2-grupo1\abb.h
 	<malloc.h>
 	"Alumno.h"
 
