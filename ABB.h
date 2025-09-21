@@ -214,18 +214,18 @@ int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
 
                 auxCursor = ABB->cursor->hijoIzq;
                 auxPadre = ABB->cursor;
-                while(auxCursor->hijoDer !=NULL)
+                while(auxCursor->hijoDer != NULL)           //mayor de los menores
                 {
                     auxPadre = auxCursor;
                     auxCursor = auxCursor->hijoDer;
                 }
                 ABB->cursor->alumno = auxCursor->alumno;
-                (*modificaciones)+=1;
+                (*modificaciones)+=1;                       //costos por copia de datos
                 if(auxPadre->hijoDer == auxCursor)
                 {
                     auxPadre->hijoDer = auxCursor->hijoIzq;
                 }
-                else //caso eliminar raiz
+                else                                        //caso eliminar raiz
                 {
                     auxPadre->hijoIzq = auxCursor->hijoIzq;
                 }
