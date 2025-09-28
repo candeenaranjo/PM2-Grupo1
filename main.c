@@ -487,6 +487,7 @@ int main()
     Alumno LSO[TAM];
     Alumno *LIBT[TAM];
     Arbol arbol;
+    InitABB(&arbol);
     char codigo[8];
     int opcion,i=1;
     int cantLSO=0, cantLIBT=0;
