@@ -50,7 +50,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
 
     //Variable costos LSO
     int altaLSO=0, bajaLSO=0, evocarLSO=0, maxaltaLSO=0, maxbajaLSO=0, maxevocarELSO=0, maxevocarFLSO=0;
-    float sumaAltaLSO=0.0, sumaBajaLSO=0.0, sumaEvocarELSO=0.0, sumaEvocarFLSO=0.0;
+    float sumaAltaLSO=0, sumaBajaLSO=0, sumaEvocarELSO=0, sumaEvocarFLSO=0;
     int cantAltaLSO=0, cantBajaLSO=0, cantEvocarELSO=0, cantEvocarFLSO=0;
 
     //Variables costos LIBT
