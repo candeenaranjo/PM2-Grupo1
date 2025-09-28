@@ -108,10 +108,6 @@ int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
 
     if(LocalizarABB(eliminar.codigo,ABB,&celdas)==0 && strcmp(eliminar.codigo, ABB->cursor->alumno.codigo)==0 && strcmp(eliminar.nombre, ABB->cursor->alumno.nombre)==0 && strcmp(eliminar.correo, ABB->cursor->alumno.correo)==0 && strcmp(eliminar.condicion, ABB->cursor->alumno.condicion)==0 && eliminar.nota == ABB->cursor->alumno.nota)
     {
-
-        if(ABB->cursor->hijoDer!=NULL || ABB->cursor->hijoIzq!=NULL)    //arbol vacio
-        {
-
             //Caso 1: eliminar nodo sin hijos
             if((ABB->cursor->hijoIzq == NULL) && (ABB->cursor->hijoDer == NULL))
             {
@@ -234,8 +230,7 @@ int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
                 return 0;
             }
 
-        }
-        return 2;       //baja no exitosa por arbol vacio
+
     }
     else
     {

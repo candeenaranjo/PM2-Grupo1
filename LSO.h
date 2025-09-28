@@ -89,6 +89,7 @@ int EvocarLSO(Alumno *aux, Alumno lso[], char codigo[], int cant, int *celdas)
         return 0;   //evocacion exitosa
     }
     return 1;   //no se encontro el alumno
+
 }
 
 #endif // LSO_H_INCLUDED
