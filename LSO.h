@@ -14,9 +14,10 @@ int LocalizarLSO (char codigo[], Alumno lso[], int *pos, int cant, int *celdas)
         (*celdas)++;
     }
 
+    if(cant!=0 && (*pos) < cant) (*celdas)++;
+
     if((*pos)<cant && strcmp(codigo,lso[*pos].codigo)==0)
     {
-        (*celdas)++;
         return 0;   //localizado
     }
     else

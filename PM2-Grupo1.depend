@@ -16,14 +16,14 @@
 	<malloc.h>
 	<windows.h>
 
-1759066601 source:c:\users\maria\onedrive\escritorio\pm2-grupo1\main.c
+1759067236 source:c:\users\maria\onedrive\escritorio\pm2-grupo1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"LSO.h"
 	"LIBB.h"
 	"ABB.h"
 
-1759066809 c:\users\maria\onedrive\escritorio\pm2-grupo1\lso.h
+1759067736 c:\users\maria\onedrive\escritorio\pm2-grupo1\lso.h
 	"Alumno.h"
 
 1757795220 c:\users\maria\onedrive\escritorio\pm2-grupo1\alumno.h
@@ -45,7 +45,7 @@
 	<malloc.h>
 	"Alumno.h"
 
-1759066087 c:\users\maria\onedrive\escritorio\pm2-grupo1\abb.h
+1759069561 c:\users\maria\onedrive\escritorio\pm2-grupo1\abb.h
 	<malloc.h>
 	"Alumno.h"
 

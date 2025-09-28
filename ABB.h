@@ -38,20 +38,24 @@ int LocalizarABB(char codigo[], Arbol *ABB, float *celdas)
 
         if(strcmp(ABB->cursor->alumno.codigo, codigo)>0 )
         {
-            (*ABB).cursor = ABB->cursor->hijoIzq;
+            ABB->cursor = ABB->cursor->hijoIzq;
         }
         else
         {
-            (*ABB).cursor = ABB->cursor->hijoDer;
+            ABB->cursor = ABB->cursor->hijoDer;
         }
         (*celdas) += 1;
 
     }
-
-    if(ABB->cursor != NULL)
+    if(ABB->cursor == NULL)
     {
-
         (*celdas) += 1;
+    }
+
+    if(ABB->cursor != NULL && strcmp(ABB->cursor->alumno.codigo, codigo) == 0)
+    {
+                (*celdas) += 1;
+
         return 0;               //localizacion exitosa
     }
     else
@@ -242,8 +246,6 @@ int BajaABB(Alumno eliminar,Arbol* ABB,float *modificaciones)
 
 int EvocarABB(Arbol *ABB, char codigo[], Alumno *alumno, float *celdas)
 {
-    Nodo* pos = ABB->raiz;
-    Nodo* aux = NULL;
 
     if(LocalizarABB(codigo, ABB, celdas)==0)
     {
