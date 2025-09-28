@@ -555,5 +555,9 @@ int main()
     }
     while (opcion!=5);
 
+    //limpiar antes de salir
+    Barrido(arbol.raiz);
+    LimpiarListaDePunteros(LIBT,&cantLIBT);
+
     return 0;
 }
