@@ -47,15 +47,10 @@ int LocalizarABB(char codigo[], Arbol *ABB, float *celdas)
         (*celdas) += 1;
 
     }
-    if(ABB->cursor == NULL)
+
+    if(ABB->cursor != NULL)
     {
         (*celdas) += 1;
-    }
-
-    if(ABB->cursor != NULL && strcmp(ABB->cursor->alumno.codigo, codigo) == 0)
-    {
-                (*celdas) += 1;
-
         return 0;               //localizacion exitosa
     }
     else

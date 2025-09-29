@@ -38,7 +38,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     int i, op=0;
     char codigo[8];
     Alumno aux;
-    FILE* fp = fopen("Operaciones.txt", "r");
+    FILE* fp;
 
     (*cantLSO)=0;
     (*cantLIBT)=0;
@@ -63,12 +63,12 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     float sumaAltaABB=0.0, sumaBajaABB=0.0, sumaEvocarEABB=0.0, sumaEvocarFABB=0.0,altaABB=0.0, bajaABB=0.0,maxaltaABB=0.0, maxbajaABB=0.0;
     int cantAltaABB=0, cantBajaABB=0, cantEvocarEABB=0, cantEvocarFABB=0;
 
-    if(fp==NULL)
+    if((fp = fopen("Operaciones-Alumnos.txt", "r"))==NULL)
     {
         printf("No se encontro el archivo\n");
         system("pause");
         system("cls");
-        return -1;
+        return 0;
     }
     else
     {
@@ -478,6 +478,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
         }
 
         gotoxy(0,13);
+        system("pause");
     }
     return 1;
 }
@@ -512,7 +513,6 @@ int main()
         {
         case 1:
             compararEstructuras(LSO,LIBT,&arbol,&cantLSO,&cantLIBT);
-            system("pause");
             system("cls");
             break;
         case 2:
