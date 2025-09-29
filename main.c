@@ -8,16 +8,16 @@
                 Practico de Maquina 2 - Dones Bautista y Naranjo Candela - Grupo 1
 
  Lista secuencial ordenada
- Costos maximos ->    Evocacion Exitosa= 100        Evocacion Fracaso= 70         Alta= 91       Baja= 91
- Costos Medios  ->    Evocacion Exitosa= 45.13      Evocacion Fracaso= 23.19      Alta= 23.01    Baja= 22.38
+ Costos maximos ->    Evocacion Exitosa= 100        Evocacion Fracaso= 71         Alta= 91       Baja= 91
+ Costos Medios  ->    Evocacion Exitosa= 45.13      Evocacion Fracaso= 24.18      Alta= 23.01    Baja= 22.38
 
  Lista Invertida con Busqueda por Triseccion
- Costos maximos ->    Evocacion Exitosa= 14         Evocacion Fracaso= 14         Alta= 45.50    Baja= 45.50
- Costos Medios  ->    Evocacion Exitosa= 11.18      Evocacion Fracaso= 10.32      Alta= 11.51    Baja= 11.19
+ Costos maximos ->    Evocacion Exitosa= 14         Evocacion Fracaso= 14         Alta= 46.00    Baja= 45.50
+ Costos Medios  ->    Evocacion Exitosa= 11.18      Evocacion Fracaso= 10.32      Alta= 12.01    Baja= 11.19
 
  Arbol binario de busqueda
  Costos maximos ->    Evocacion Exitosa= 12.00      Evocacion Fracaso= 11.00      Alta= 0.50     Baja= 1.50
- Costos Medios  ->    Evocacion Exitosa= 6.28       Evocacion Fracaso= 6.14       Alta= 0.50     Baja= 1.12
+ Costos Medios  ->    Evocacion Exitosa= 6.43       Evocacion Fracaso= 5.85       Alta= 0.50     Baja= 0.98
 
  Analizando los resultados obtenidos podemos ver una gran diferencia en los costos de las listas con el ABB,
  por lo que la mejor estructura para localizaciones, altas y bajas sería el ABB (en este caso). Pero podemos
@@ -63,7 +63,7 @@ int compararEstructuras(Alumno LSO[], Alumno *LIBT[],Arbol *ABB, int *cantLSO, i
     float sumaAltaABB=0.0, sumaBajaABB=0.0, sumaEvocarEABB=0.0, sumaEvocarFABB=0.0,altaABB=0.0, bajaABB=0.0,maxaltaABB=0.0, maxbajaABB=0.0;
     int cantAltaABB=0, cantBajaABB=0, cantEvocarEABB=0, cantEvocarFABB=0;
 
-    if((fp = fopen("Operaciones-Alumnos.txt", "r"))==NULL)
+    if((fp = fopen("ghgfhfh.txt", "r"))==NULL)
     {
         printf("No se encontro el archivo\n");
         system("pause");
